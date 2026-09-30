@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cloth — Next.js storefront + Medusa.js backend
 
-## Getting Started
+Fashion e-commerce app: a Next.js 16 (App Router) storefront and a Medusa v2
+backend, wired through a dedicated service layer so no page ever touches
+backend URLs or tokens.
 
-First, run the development server:
+## Architecture
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+app/           Next.js pages — import data ONLY from @/api
+api/           Frontend service layer (the only place env vars are read)
+├── config.ts     MEDUSA_BACKEND_URL + publishable key from env
+├── client.ts     fetch wrapper (x-publishable-api-key, caching, errors)
+├── mappers.ts    Medusa products/variants → frontend Product shape
+├── products.ts   listProducts / getProduct / resolveVariantId / listCategories
+├── collections.ts  curated collections (mens / womens / new-arrivals)
+├── regions.ts    default USD region
+└── cart.ts       Medusa cart operations (create, line items)
+
+backend/       Medusa v2 application (port 9000)
+├── src/scripts/seed.ts   seeds region, key, categories, full catalog
+├── scripts/db.mjs        project-local Postgres (no Docker needed)
+└── docker-compose.yml    optional Postgres for production-like runs
+
+store/cart.tsx Client cart context — localStorage state synced to a Medusa cart
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Running locally
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+From the repo root (`cloth/`), run `pnpm install` once — it installs both
+`frontend/` and `backend/` as workspace packages.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Backend** (`backend/.env` — currently points at the Neon Postgres):
 
-## Learn More
+   ```bash
+   cd ../backend
+   pnpm dev          # Medusa on http://localhost:9000
+   pnpm seed         # one-time (idempotent): seeds catalog, prints the publishable key
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+   Using the local embedded Postgres instead of Neon:
+   `pnpm db:setup` (once) → `pnpm db` (keeps it running) → `pnpm exec medusa db:migrate` → `pnpm seed`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Storefront** (this folder — `frontend/.env.local` holds the publishable key):
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   pnpm dev          # http://localhost:3000
+   ```
 
-## Deploy on Vercel
+The seed is idempotent — re-running it reuses the region, key, categories and
+products that already exist. `pnpm db:reset` wipes the database.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Admin dashboard: http://localhost:9000/app (create an admin user with
+`pnpm --filter medusa-starter-default exec medusa user -e admin@cloth.test -p supersecret`).
