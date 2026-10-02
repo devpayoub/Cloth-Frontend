@@ -35,7 +35,7 @@ export function Navbar({ products }: NavbarProps) {
       style={{ viewTransitionName: "site-header" }}
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-300 ease-in-out",
-        searchOpen || solid
+        solid
           ? "bg-white/80 text-black backdrop-blur-md"
           : "bg-transparent text-white"
       )}

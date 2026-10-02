@@ -2,6 +2,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { ShopClient } from "@/components/shop/ShopClient";
 import { listCategories, listProducts } from "@/api";
+import { catalogContent } from "@/content/site";
 
 export default async function ShopPage() {
   const [products, categories] = await Promise.all([
@@ -12,9 +13,9 @@ export default async function ShopPage() {
   return (
     <PageTransition>
       <PageHeader
-        eyebrow="FW2026 Collection"
-        title="Catalog"
-        description="Every piece from the current season, cut in limited runs."
+        eyebrow={catalogContent.eyebrow}
+        title={catalogContent.title}
+        description={catalogContent.description}
       />
       <ShopClient products={products} categories={categories} />
     </PageTransition>

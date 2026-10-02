@@ -12,7 +12,9 @@ type ProductSpotlightProps = {
 };
 
 export function ProductSpotlight({ product }: ProductSpotlightProps) {
-  const [leftImage, rightImage] = product.images;
+  const [leftImage] = product.images;
+  // Products with a single image reuse it for the right panel.
+  const rightImage = product.images[1] ?? leftImage;
   const containerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const [maxTravel, setMaxTravel] = useState(0);

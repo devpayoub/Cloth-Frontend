@@ -4,9 +4,14 @@ import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
 import { ChevronDown } from "lucide-react";
-import { EASE, SITE_CONFIG } from "@/constants";
+import { EASE } from "@/constants";
+import type { heroContent as HeroContent } from "@/content/site";
 
-export function HeroSection() {
+type HeroSectionProps = {
+  content: typeof HeroContent;
+};
+
+export function HeroSection({ content }: HeroSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
   // 0 = hero fully in view, 1 = hero scrolled past; the title glides up
@@ -33,8 +38,8 @@ export function HeroSection() {
         className="absolute inset-0 mx-auto h-full w-full max-w-[1920px]"
       >
         <Image
-          src="/HOME.png"
-          alt="HOME"
+          src={content.image}
+          alt={content.alt}
           fill
           priority
           sizes="(min-width: 1920px) 1920px, 100vw"
@@ -63,7 +68,7 @@ export function HeroSection() {
           transition={{ duration: 1, delay: 0.3, ease: EASE.out }}
           className="inline-block"
         >
-          {SITE_CONFIG.name}
+          {content.title ?? "Cloth"}
         </motion.span>
       </motion.h1>
 

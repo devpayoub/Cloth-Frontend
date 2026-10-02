@@ -4,38 +4,49 @@ import { ProductSpotlight } from "@/components/home/ProductSpotlight";
 import { CollectionBanner } from "@/components/home/CollectionBanner";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { listProducts } from "@/api";
+import { banners, heroContent } from "@/content/site";
 
 export default async function Home() {
   const products = await listProducts();
   const spotlight = products[0];
+  const [womensBanner, mensBanner, newArrivalsBanner] = banners;
 
   return (
     <PageTransition>
-      <HeroSection />
+      <HeroSection content={heroContent} />
       <FeaturedProducts morph />
       {spotlight && <ProductSpotlight product={spotlight} />}
-      <CollectionBanner
-        imageSrc="/banner-womens.webp"
-        pretitle="FW2026"
-        title="Women's Exclusive"
-        buttonLabel="Shop Now"
-        href="/collections/womens-new-arrivals"
-      />
+      {womensBanner && (
+        <CollectionBanner
+          imageSrc={womensBanner.image}
+          alt={womensBanner.alt}
+          pretitle={womensBanner.pretitle}
+          title={womensBanner.title}
+          buttonLabel={womensBanner.buttonLabel}
+          href={womensBanner.href}
+        />
+      )}
       <FeaturedProducts />
-      <CollectionBanner
-        imageSrc="/banner-man.webp"
-        pretitle="FW2026"
-        title="Men's Exclusive"
-        buttonLabel="Shop Now"
-        href="/collections/mens-new-arrivals"
-      />
-      <CollectionBanner
-        imageSrc="/banner-man2.webp"
-        pretitle="FW2026"
-        title="New Arrivals"
-        buttonLabel="Shop Now"
-        href="/collections/new-arrivals"
-      />
+      {mensBanner && (
+        <CollectionBanner
+          imageSrc={mensBanner.image}
+          alt={mensBanner.alt}
+          pretitle={mensBanner.pretitle}
+          title={mensBanner.title}
+          buttonLabel={mensBanner.buttonLabel}
+          href={mensBanner.href}
+        />
+      )}
+      {newArrivalsBanner && (
+        <CollectionBanner
+          imageSrc={newArrivalsBanner.image}
+          alt={newArrivalsBanner.alt}
+          pretitle={newArrivalsBanner.pretitle}
+          title={newArrivalsBanner.title}
+          buttonLabel={newArrivalsBanner.buttonLabel}
+          href={newArrivalsBanner.href}
+        />
+      )}
     </PageTransition>
   );
 }

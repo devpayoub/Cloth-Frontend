@@ -7,6 +7,7 @@ import { motion, useScroll, useTransform } from "motion/react";
 
 type CollectionBannerProps = {
   imageSrc: string;
+  alt?: string;
   pretitle: string;
   title: string;
   buttonLabel: string;
@@ -15,6 +16,7 @@ type CollectionBannerProps = {
 
 export function CollectionBanner({
   imageSrc,
+  alt = "",
   pretitle,
   title,
   buttonLabel,
@@ -48,7 +50,7 @@ export function CollectionBanner({
       ref={containerRef}
       className="relative aspect-[2/1] w-full max-h-[900px] overflow-hidden bg-neutral-100"
     >
-      <Image src={imageSrc} alt="" fill sizes="100vw" className="object-cover" />
+      <Image src={imageSrc} alt={alt} fill sizes="100vw" className="object-cover" />
 
       <motion.div
         ref={overlayRef}
