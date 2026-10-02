@@ -7,6 +7,8 @@ export { listProducts, getProduct, resolveVariantId, listCategories } from "./pr
 export type { ListProductsOptions, ProductSort } from "./products";
 export { getCollection, listCollectionSlugs } from "./collections";
 export type { StorefrontCollection } from "./collections";
+export { getSiteContent, fallbackSiteContent } from "./content";
+export type { SiteContent } from "./content";
 export { getDefaultRegionId } from "./regions";
 export {
   createCart,

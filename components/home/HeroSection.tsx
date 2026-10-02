@@ -5,10 +5,14 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
 import { ChevronDown } from "lucide-react";
 import { EASE } from "@/constants";
-import type { heroContent as HeroContent } from "@/content/site";
 
 type HeroSectionProps = {
-  content: typeof HeroContent;
+  content: {
+    image: string;
+    title?: string;
+    alt?: string;
+    introDuration?: number;
+  };
 };
 
 export function HeroSection({ content }: HeroSectionProps) {
@@ -39,7 +43,7 @@ export function HeroSection({ content }: HeroSectionProps) {
       >
         <Image
           src={content.image}
-          alt={content.alt}
+          alt={content.alt ?? ""}
           fill
           priority
           sizes="(min-width: 1920px) 1920px, 100vw"

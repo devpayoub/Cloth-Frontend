@@ -4,16 +4,16 @@ import { ProductSpotlight } from "@/components/home/ProductSpotlight";
 import { CollectionBanner } from "@/components/home/CollectionBanner";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { listProducts } from "@/api";
-import { banners, heroContent } from "@/content/site";
+import { getSiteContent } from "@/api";
 
 export default async function Home() {
-  const products = await listProducts();
+  const [products, content] = await Promise.all([listProducts(), getSiteContent()]);
   const spotlight = products[0];
-  const [womensBanner, mensBanner, newArrivalsBanner] = banners;
+  const [womensBanner, mensBanner, newArrivalsBanner] = content.banners;
 
   return (
     <PageTransition>
-      <HeroSection content={heroContent} />
+      <HeroSection content={content.hero} />
       <FeaturedProducts morph />
       {spotlight && <ProductSpotlight product={spotlight} />}
       {womensBanner && (
