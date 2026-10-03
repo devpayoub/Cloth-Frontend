@@ -9,6 +9,7 @@ import { ArrowLeft, Check, Plus, Star } from "lucide-react";
 import type { Product } from "@/types";
 import { ROUTES } from "@/constants";
 import { useCart } from "@/store/cart";
+import { useMediaQuery } from "@/hooks";
 import { cn, formatPrice } from "@/utils";
 import { ProductGrid } from "@/components/product/ProductGrid";
 
@@ -72,6 +73,9 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
   const [activeImage, setActiveImage] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { add } = useCart();
+  // The sticky parallax experience only applies on large screens; mobile
+  // renders a normal flowing layout.
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   const { scrollYProgress } = useScroll({
     target: scrollRef,
@@ -105,55 +109,9 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
 
   return (
     <>
-      <div ref={scrollRef} className="relative h-[200vh] bg-white text-black">
-        <div className="sticky top-0 flex h-screen items-center overflow-hidden pt-20">
-          <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-6 px-6 lg:grid-cols-[1fr_1.4fr_1fr] lg:gap-4 lg:px-10">
-            <motion.div
-              variants={enter}
-              initial="hidden"
-              animate="visible"
-              custom={0.15}
-              className="order-2 lg:order-1"
-            >
-              <Link
-                href={ROUTES.shop}
-                transitionTypes={["nav-back"]}
-                className="group inline-flex items-center gap-2 text-sm"
-              >
-                <ArrowLeft
-                  className="h-5 w-5 transition-transform duration-300 ease-out group-hover:-translate-x-1"
-                  strokeWidth={1.5}
-                />
-                <span className="uppercase tracking-widest">Back</span>
-              </Link>
-
-              <div className="mt-10 flex items-center gap-3">
-                <span className="text-xs uppercase tracking-widest text-neutral-500">
-                  {product.category}
-                </span>
-                {product.isNew && (
-                  <span className="border border-black px-1.5 py-0.5 text-[10px] uppercase tracking-widest">
-                    New
-                  </span>
-                )}
-              </div>
-
-              <h1 className="mt-3 font-display text-5xl tracking-wide sm:text-6xl">
-                {product.name}
-              </h1>
-
-              <div className="mt-3 flex items-center gap-1.5 text-xs text-neutral-500">
-                <Star className="h-3.5 w-3.5 fill-current text-black" strokeWidth={1.5} />
-                <span>
-                  {product.rating.toFixed(1)} ({product.reviewCount} reviews)
-                </span>
-              </div>
-
-              <p className="mt-4 max-w-sm text-sm leading-relaxed text-neutral-600">
-                {product.description}
-              </p>
-            </motion.div>
-
+      <div ref={scrollRef} className="relative bg-white text-black lg:h-[200vh]">
+        <div className="mx-auto max-w-7xl px-6 py-10 sm:px-10 lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center lg:overflow-hidden lg:px-10 lg:py-0">
+          <div className="grid w-full grid-cols-1 items-start gap-10 lg:grid-cols-[1fr_1.4fr_1fr] lg:items-center lg:gap-4">
             <div className="order-1 lg:order-2">
               <ViewTransition
                 name={`product-${product.slug}`}
@@ -161,7 +119,10 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
                 default="none"
               >
                 <div className="relative mx-auto aspect-[4/5] w-full max-w-md">
-                  <motion.div style={{ y: primaryY }} className="absolute inset-0">
+                  <motion.div
+                    style={isDesktop ? { y: primaryY } : undefined}
+                    className="absolute inset-0"
+                  >
                     <Image
                       src={primaryImage}
                       alt={product.name}
@@ -171,7 +132,7 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
                       className="object-cover"
                     />
                   </motion.div>
-                  {secondaryImage && (
+                  {secondaryImage && isDesktop && (
                     <motion.div style={{ y: secondaryY }} className="absolute inset-0">
                       <Image
                         src={secondaryImage}
@@ -184,7 +145,7 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
                   )}
 
                   {secondaryImage && (
-                    <div className="absolute inset-x-0 bottom-5 z-10 flex flex-col items-center gap-2">
+                    <div className="absolute inset-x-0 bottom-5 z-10 hidden flex-col items-center gap-2 lg:flex">
                       <div className="h-px w-12 overflow-hidden bg-black/15">
                         <motion.div
                           style={{ scaleX: scrollYProgress }}
@@ -204,7 +165,66 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
                   )}
                 </div>
               </ViewTransition>
+
+              {/* Mobile: second image shown as a normal block under the first */}
+              {secondaryImage && (
+                <div className="relative mx-auto mt-4 aspect-[4/5] w-full max-w-md lg:hidden">
+                  <Image
+                    src={secondaryImage}
+                    alt=""
+                    fill
+                    sizes="90vw"
+                    className="object-cover"
+                  />
+                </div>
+              )}
             </div>
+
+            <motion.div
+              variants={enter}
+              initial="hidden"
+              animate="visible"
+              custom={0.15}
+              className="order-2 lg:order-1"
+            >
+              <Link
+                href={ROUTES.shop}
+                transitionTypes={["nav-back"]}
+                className="group inline-flex items-center gap-2 text-sm"
+              >
+                <ArrowLeft
+                  className="h-5 w-5 transition-transform duration-300 ease-out group-hover:-translate-x-1"
+                  strokeWidth={1.5}
+                />
+                <span className="uppercase tracking-widest">Back</span>
+              </Link>
+
+              <div className="mt-8 flex items-center gap-3 lg:mt-10">
+                <span className="text-xs uppercase tracking-widest text-neutral-500">
+                  {product.category}
+                </span>
+                {product.isNew && (
+                  <span className="border border-black px-1.5 py-0.5 text-[10px] uppercase tracking-widest">
+                    New
+                  </span>
+                )}
+              </div>
+
+              <h1 className="mt-3 font-display text-4xl tracking-wide sm:text-5xl lg:text-6xl">
+                {product.name}
+              </h1>
+
+              <div className="mt-3 flex items-center gap-1.5 text-xs text-neutral-500">
+                <Star className="h-3.5 w-3.5 fill-current text-black" strokeWidth={1.5} />
+                <span>
+                  {product.rating.toFixed(1)} ({product.reviewCount} reviews)
+                </span>
+              </div>
+
+              <p className="mt-4 max-w-sm text-sm leading-relaxed text-neutral-600">
+                {product.description}
+              </p>
+            </motion.div>
 
             <motion.div
               variants={enter}
@@ -308,7 +328,8 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
                     {product.tags.join(" · ")}
                   </span>
                   Part of the FW2026 collection. Relaxed fit — take your usual
-                  size. Model is 186 cm and wears a size {product.sizes[Math.floor(product.sizes.length / 2)]}.
+                  size. Model is 186 cm and wears a size{" "}
+                  {product.sizes[Math.floor(product.sizes.length / 2)]}.
                 </AccordionRow>
                 <AccordionRow title="Shipping & Returns">
                   Free shipping on orders over $150. Delivered within 3–5
@@ -319,7 +340,8 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
           </div>
         </div>
       </div>
-      <section className="px-6 py-20 sm:px-10">
+
+      <section className="px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-7xl">
           <ProductGrid products={relatedProducts} />
         </div>

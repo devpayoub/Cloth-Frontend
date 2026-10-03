@@ -41,14 +41,16 @@ export function HeroSection({ content }: HeroSectionProps) {
         transition={{ duration: 2, ease: EASE.out }}
         className="absolute inset-0 mx-auto h-full w-full max-w-[1920px]"
       >
-        <Image
-          src={content.image}
-          alt={content.alt ?? ""}
-          fill
-          priority
-          sizes="(min-width: 1920px) 1920px, 100vw"
-          className="object-cover object-[50%_25%]"
-        />
+        {content.image && (
+          <Image
+            src={content.image}
+            alt={content.alt ?? ""}
+            fill
+            priority
+            sizes="(min-width: 1920px) 1920px, 100vw"
+            className="object-cover object-[50%_25%]"
+          />
+        )}
       </motion.div>
       <motion.div
         initial={{ opacity: 0 }}

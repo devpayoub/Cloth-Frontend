@@ -56,7 +56,7 @@ export function ProductSpotlight({ product }: ProductSpotlightProps) {
         <motion.div
           ref={overlayRef}
           style={{ y }}
-          className="absolute inset-x-0 top-0 z-10 flex h-56 flex-col justify-end px-8 pb-8 text-white"
+          className="absolute inset-x-0 top-0 z-10 flex flex-col px-6 pb-6 pt-16 text-white sm:px-8 sm:pt-24"
         >
           <span className="text-xl font-semibold">{product.name}</span>
           <span className="mt-1 text-sm capitalize text-gray-300">

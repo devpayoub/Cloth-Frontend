@@ -50,17 +50,19 @@ export function CollectionBanner({
       ref={containerRef}
       className="relative aspect-[2/1] w-full max-h-[900px] overflow-hidden bg-neutral-100"
     >
-      <Image src={imageSrc} alt={alt} fill sizes="100vw" className="object-cover" />
+      {imageSrc && (
+        <Image src={imageSrc} alt={alt} fill sizes="100vw" className="object-cover" />
+      )}
 
       <motion.div
         ref={overlayRef}
         style={{ y }}
-        className="absolute inset-x-0 top-0 z-10 flex h-56 flex-col justify-end px-8 pb-8 text-white sm:px-12"
+        className="absolute inset-x-0 top-0 z-10 flex flex-col px-6 pb-6 pt-14 text-white sm:px-12 sm:pt-20"
       >
         <p className="text-sm uppercase tracking-widest text-gray-300">
           {pretitle}
         </p>
-        <h2 className="mt-1 font-display text-5xl tracking-wide sm:text-6xl">
+        <h2 className="mt-1 font-display text-3xl tracking-wide sm:text-5xl lg:text-6xl">
           {title}
         </h2>
         <Link

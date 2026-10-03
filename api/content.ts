@@ -54,7 +54,7 @@ const TTL_MS = CATALOG_REVALIDATE_SECONDS * 1000;
 
 export async function getSiteContent(): Promise<SiteContent> {
   const now = Date.now();
-  if (!contentCache || now - contentCache.at > TTL_MS) {
+  if (!contentCache || TTL_MS === 0 || now - contentCache.at > TTL_MS) {
     contentCache = {
       at: now,
       promise: medusaClient

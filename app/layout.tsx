@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Bebas_Neue } from "next/font/google";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/store/cart";
+import { AuthProvider } from "@/store/auth";
 import { listProducts } from "@/api";
 import { SITE_CONFIG } from "@/constants";
 import "./globals.css";
@@ -38,11 +39,13 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <CartProvider>
-          <Navbar products={products} />
-          <div className="relative z-10 mb-[420px] bg-white">{children}</div>
-          <Footer />
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <Navbar products={products} />
+            <div className="relative z-10 mb-[420px] bg-white">{children}</div>
+            <Footer />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

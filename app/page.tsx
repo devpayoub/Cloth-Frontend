@@ -16,7 +16,7 @@ export default async function Home() {
       <HeroSection content={content.hero} />
       <FeaturedProducts morph />
       {spotlight && <ProductSpotlight product={spotlight} />}
-      {womensBanner && (
+      {womensBanner?.image && (
         <CollectionBanner
           imageSrc={womensBanner.image}
           alt={womensBanner.alt}
@@ -27,7 +27,7 @@ export default async function Home() {
         />
       )}
       <FeaturedProducts />
-      {mensBanner && (
+      {mensBanner?.image && (
         <CollectionBanner
           imageSrc={mensBanner.image}
           alt={mensBanner.alt}
@@ -37,7 +37,7 @@ export default async function Home() {
           href={mensBanner.href}
         />
       )}
-      {newArrivalsBanner && (
+      {newArrivalsBanner?.image && (
         <CollectionBanner
           imageSrc={newArrivalsBanner.image}
           alt={newArrivalsBanner.alt}

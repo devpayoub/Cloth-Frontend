@@ -7,9 +7,10 @@ const nextConfig: NextConfig = {
     root: path.join(__dirname, ".."),
   },
   images: {
-    // Medusa-served images (uploaded site content lives on the backend).
+    // Uploaded site content images live in Neon Object Storage.
     remotePatterns: [
       { protocol: "http", hostname: "localhost", port: "9000" },
+      { protocol: "https", hostname: "storage.us-east-2.aws.neon.tech" },
       { protocol: "https", hostname: "**" },
     ],
   },

@@ -5,9 +5,11 @@ export const ROUTES = {
   category: (slug: string) => `/categories/${slug}`,
   cart: "/cart",
   checkout: "/checkout",
-  login: "/login",
-  register: "/register",
+  login: "/account",
+  register: "/account",
   account: "/account",
+  profile: "/account/profile",
+  shipping: "/account/profile/shipping",
   orders: "/account/orders",
   wishlist: "/wishlist",
 } as const;

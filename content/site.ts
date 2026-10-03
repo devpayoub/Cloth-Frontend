@@ -1,13 +1,14 @@
 /**
  * ─────────────────────────────────────────────────────────────────────────
- *  SITE CONTENT — single source of truth for every homepage section.
- *  Edit images (paths under /public) and copy here; no component changes
- *  needed. Images live in frontend/public.
+ *  SITE CONTENT — default copy for every homepage section.
+ *  Images are managed exclusively via the Medusa Admin "Site Content" page
+ *  and served from the database/object storage. No static image assets are
+ *  used here.
  * ─────────────────────────────────────────────────────────────────────────
  */
 
 export const heroContent = {
-  image: "/HOME.png",
+  image: "",
   /** Big display title over the hero. */
   title: "Cloth",
   alt: "Cloth — FW2026 collection",
@@ -26,7 +27,7 @@ export type BannerContent = {
 
 export const banners: BannerContent[] = [
   {
-    image: "/banner-womens.webp",
+    image: "",
     alt: "Women's exclusive FW2026 looks",
     pretitle: "FW2026",
     title: "Women's Exclusive",
@@ -34,7 +35,7 @@ export const banners: BannerContent[] = [
     href: "/collections/womens-new-arrivals",
   },
   {
-    image: "/banner-man.webp",
+    image: "",
     alt: "Men's exclusive FW2026 looks",
     pretitle: "FW2026",
     title: "Men's Exclusive",
@@ -42,7 +43,7 @@ export const banners: BannerContent[] = [
     href: "/collections/mens-new-arrivals",
   },
   {
-    image: "/banner-man2.webp",
+    image: "",
     alt: "New arrivals FW2026",
     pretitle: "FW2026",
     title: "New Arrivals",
